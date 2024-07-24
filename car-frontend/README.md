@@ -1,46 +1,77 @@
-# Getting Started with Create React App
+# Car Shipping Management System - Frontend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## What's inside
 
-## Available Scripts
+- [redux-toolkit](https://github.com/reduxjs/redux-toolkit) (state management)
+- [styled-components](https://github.com/styled-components/styled-components) (JSX CSS framework)
+- [Axios](https://github.com/mzabriskie/axios) (a library for XMLHttpRequests)
+- [Formik](https://github.com/formium/formik) (Forms in react without hassle)
+- [Yup](https://github.com/jquense/yup) (Schema validations)
+- [React-Toastify](https://github.com/fkhadra/react-toastify) (Notifications)
 
-In the project directory, you can run:
+For code quality:
 
-### `npm start`
+- [ESLint](https://github.com/eslint/eslint)
+- [Prettier](https://github.com/prettier/prettier)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+For testing:
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+- [Facebook/Jest](https://facebook.github.io/jest/)
+- [Testing-library/React](https://testing-library.com/docs/react-testing-library/intro)
+- [Jest-dom](https://github.com/testing-library/jest-dom) (Custom jest matchers to test the state of the DOM)
 
-### `npm test`
+## Getting Started
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Installation
 
-### `npm run build`
+Clone the repo:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```bash
+git clone https://github.com/hashaneranda/car-shipping-management
+cd car-shipping-management/car-frontend
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Install the dependencies:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```bash
+yarn install
+```
 
-### `npm run eject`
+and create a new file .env and copy the content of .env.sample
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+### Commands
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Running locally:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+```bash
+yarn start
+```
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+Building the app for production:
 
-## Learn More
+```bash
+yarn build
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Testing:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```bash
+# run all tests
+yarn test
+
+```
+
+Note: this project is based on [Create React App](https://github.com/facebook/create-react-app).
+
+## Project Structure
+
+```
+src\
+ |--app\            # Application main layout, redux store, root reducers, root saga
+ |--assets\         # Assets
+ |--common\         # common Compoenents and utilities
+ |--config\         # Configrations of the app (Constants, Images links)
+ |--feature\        # Redux Slices, Sagas , Watchers
+ |--pages\          # App pages
+ |--index.js        # react app - app entry point
+```
