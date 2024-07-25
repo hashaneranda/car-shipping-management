@@ -1,6 +1,6 @@
 // reducers
 // import modal from 'features/modal/modalSlice';
-// import user from 'features/user/userSlice';
+import user from 'features/user/userSlice';
 // import forgotPassword from 'features/forgotPassword/forgotPasswordSlice';
 // import post from 'features/post/postSlice';
 // import history from 'features/history/historySlice';
@@ -8,7 +8,7 @@
 
 const rootReducer = {
   // modal,
-  // user,
+  user,
   // forgotPassword,
   // post,
   // history,

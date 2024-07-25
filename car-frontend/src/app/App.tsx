@@ -7,6 +7,8 @@ import Layout from 'common/components/Layout/Layout';
 // context
 import { Context as UserContext } from 'common/context/UserContext';
 import Home from 'pages/Home/Home';
+import Login from 'pages/Login/Login';
+import Register from 'pages/Register/Register';
 
 const App = () => {
   // const { state } = useContext(UserContext);
@@ -16,6 +18,8 @@ const App = () => {
       <Layout>
         <Routes>
           <Route path='/' element={<Home />} />
+          <Route path='/login' element={<Login />} />
+          <Route path='/register' element={<Register />} />
           {/* <Route path="/login" element={<LoginPage />} />
         <Route path="/dashboard" element={
           <ProtectedRoute>

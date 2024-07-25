@@ -13,12 +13,12 @@ RUN npm install --save-dev nodemon
 COPY . .
 
 # Copy nodemon config
-COPY nodemon.json nodemon.json
+# COPY nodemon.json nodemon.json
 
 # Copy .env file
 COPY .env .env
 
-RUN npm run seed
+# RUN npm run seed
 
 EXPOSE 3000
 CMD [ "npm", "run", "start:dev" ]

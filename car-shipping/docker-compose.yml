@@ -1,4 +1,4 @@
-version: '3'
+version: '3.8'
 services:
   app:
     build: .
@@ -8,12 +8,13 @@ services:
       - .:/usr/src/app
       - /usr/src/app/node_modules
     environment:
-      - MONGODB_URI=mongodb://mongo:27017/car-shipping
+      - MONGODB_URI=mongodb://mongo:27017/car-managment
     depends_on:
       - mongo
   mongo:
-    image: mongo
+    image: mongo:latest
     ports:
       - '27017:27017'
     volumes:
       - ./data:/data/db
+    command: mongod --storageEngine wiredTiger

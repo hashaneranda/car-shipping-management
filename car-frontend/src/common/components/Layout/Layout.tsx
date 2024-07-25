@@ -8,7 +8,7 @@ type Props = {
 
 export default function Layout({ children }: Props) {
   return (
-    <div className='min-h-[100vh] relative'>
+    <div className='relative min-h-screen'>
       <Navbar />
       {children}
       <Footer />

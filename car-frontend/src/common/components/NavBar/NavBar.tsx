@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { FaReact, FaBreadSlice, FaCross } from 'react-icons/fa';
 // import Button from './Button';
 import NavList from './components/NavList/NavList';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -25,9 +25,10 @@ const Navbar = () => {
       </ul>
 
       <div className='flex-shrink-0 hidden lg:flex lg:mr-5'>
-        <a href='#' className='px-10 py-3 text-lg font-semibold hover:text-reddish'>
+        <Link className='px-10 py-3 text-lg font-semibold hover:text-reddish' to={'login'}>
           Sign In
-        </a>
+        </Link>
+
         {/* <Button text="Register" width="px-10"/> */}
       </div>
 
