@@ -2,7 +2,7 @@ import React from 'react';
 
 const Footer = () => {
   return (
-    <div className='absolute bottom-0 grid grid-cols-1 gap-5 pb-5 mx-8 text-justify md:grid-cols-2 md:gap-10 lg:grid-cols-4 lg:gap-5'>
+    <div className='bottom-0 grid grid-cols-1 gap-5 pb-5 mx-8 text-justify bg-white md:absolute md:grid-cols-2 md:gap-10 lg:grid-cols-4 lg:gap-5'>
       <div>
         <h2 className='inline-flex font-poppins font-[400] text-2xl'>
           <span className='font-[900]'>CAR</span>Managment

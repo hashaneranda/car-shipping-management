@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 // import {logo,close,menu} from "../assets";
 
-import { FaReact, FaBreadSlice, FaCross } from 'react-icons/fa';
+import { FaReact } from 'react-icons/fa';
+import { MdOutlineMenu, MdClose } from 'react-icons/md';
 // import Button from './Button';
 import NavList from './components/NavList/NavList';
 import { Link, useNavigate } from 'react-router-dom';
+import { PrimaryButton } from '../Button/Button';
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -29,12 +31,12 @@ const Navbar = () => {
           Sign In
         </Link>
 
-        {/* <Button text="Register" width="px-10"/> */}
+        <PrimaryButton onClick={() => navigate('/register')}>Register</PrimaryButton>
       </div>
 
       <div className='lg:hidden'>
-        <div className='w-[40px] mx-5' onClick={() => setToggle(prev => !prev)}>
-          {toggle ? <FaBreadSlice size={100} className='text-blue-500' /> : <FaCross size={100} className='text-blue-500' />}
+        <div className='w-[40px] mx-5  mr-12' onClick={() => setToggle(prev => !prev)}>
+          {toggle ? <MdOutlineMenu size={50} className='text-blue-500' /> : <MdClose size={50} className='text-blue-500' />}
         </div>
 
         <ul

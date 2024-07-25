@@ -4,10 +4,23 @@ import './index.css';
 import App from 'app/App';
 import reportWebVitals from './reportWebVitals';
 
+// context
+import { Provider as UserProvider } from 'common/context/UserContext';
+
+// store
+import store from 'app/store';
+import { Provider } from 'react-redux';
+import { ToastContainer } from 'react-toastify';
+
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
   <React.StrictMode>
-    <App />
+    <UserProvider>
+      <Provider store={store}>
+        <ToastContainer />
+        <App />
+      </Provider>
+    </UserProvider>
   </React.StrictMode>,
 );
 

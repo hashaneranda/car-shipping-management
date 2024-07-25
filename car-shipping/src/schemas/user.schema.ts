@@ -1,4 +1,3 @@
-// src/schemas/user.schema.ts
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
@@ -15,4 +14,13 @@ export class User {
   name: string;
 }
 
-export const UserSchema = SchemaFactory.createForClass(User);
+const UserSchemaT = SchemaFactory.createForClass(User);
+
+UserSchemaT.set('toJSON', {
+  transform: (doc, ret) => {
+    delete ret.password;
+    return ret;
+  },
+});
+
+export const UserSchema = UserSchemaT;

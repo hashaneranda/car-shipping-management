@@ -4,8 +4,14 @@ import { Formik, Field, Form, ErrorMessage } from 'formik';
 import { loginInitialState, loginValidations } from './utils/formHelper';
 import TextFeild from 'common/components/FormHelper/TextFeild';
 import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from 'app/rootReducer';
+import { loginUser } from 'features/user/userSlice';
 
 const Login: React.FC = () => {
+  const dispatch = useDispatch();
+  const { loading, error } = useSelector((state: RootState) => state.user?.registerUserPayload);
+
   return (
     <div className='flex items-center justify-center '>
       <div className='w-full max-w-md p-8 space-y-3 bg-white rounded-lg '>
@@ -16,6 +22,8 @@ const Login: React.FC = () => {
           onSubmit={(values, { setSubmitting }) => {
             console.log(values);
             // setSubmitting(false);
+
+            dispatch(loginUser(values));
           }}
         >
           <Form className='space-y-4'>
