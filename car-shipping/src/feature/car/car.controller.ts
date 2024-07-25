@@ -13,6 +13,7 @@ import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CarService } from './car.service';
 import { CreateCarDto } from './dto/create-car.dto';
 import { UpdateCarDto } from './dto/update-car.dto';
+import { QueryCarDto } from './dto/query-car.dto';
 
 @ApiTags('cars')
 @ApiBearerAuth()
@@ -22,7 +23,7 @@ export class CarController {
 
   @Get()
   @ApiOperation({ summary: 'Get all cars' })
-  async getCars(@Query() query: any) {
+  async getCars(@Query() query: QueryCarDto) {
     return this.carService.findAll(query);
   }
 

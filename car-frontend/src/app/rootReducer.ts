@@ -1,18 +1,12 @@
 // reducers
 // import modal from 'features/modal/modalSlice';
 import user from 'features/user/userSlice';
-// import forgotPassword from 'features/forgotPassword/forgotPasswordSlice';
-// import post from 'features/post/postSlice';
-// import history from 'features/history/historySlice';
-// import comment from 'features/comment/commentSlice';
+import car from 'features/car/carSlice';
 
 const rootReducer = {
   // modal,
   user,
-  // forgotPassword,
-  // post,
-  // history,
-  // comment,
+  car,
 };
 
 export type RootState = ReturnType<any>;
