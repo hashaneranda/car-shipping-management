@@ -20,10 +20,25 @@ interface UserContextProps {
   setUserData: (user: any) => void;
 }
 
+const getValueParse = (key: string, defaultVal: any): any => {
+  const original = getFromStorage(key);
+
+  if (!original) return defaultVal;
+
+  let val;
+  try {
+    val = JSON.parse(original);
+  } catch (e) {
+    console.log('err');
+  }
+
+  return val;
+};
+
 const initialState: UserState = {
-  isAuthenticated: getFromStorage('token') ? !!JSON.parse(getFromStorage('token')) : false,
-  user: getFromStorage('user') ? JSON.parse(getFromStorage('user')) : null,
-  token: getFromStorage('token') ? JSON.parse(getFromStorage('token')) : '',
+  isAuthenticated: !!getValueParse('token', false),
+  user: getValueParse('user', null),
+  token: getValueParse('token', ''),
 };
 
 // Define actions

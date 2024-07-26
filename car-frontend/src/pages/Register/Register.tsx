@@ -1,16 +1,19 @@
 import React, { useContext, useEffect } from 'react';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
 
 // context
 import { Context as UserContext } from 'common/context/UserContext';
 
-import TextFeild from 'common/components/FormHelper/TextFeild';
-import { registerInitialState, registerValidations } from './utils/formHelper';
-import { Link, useNavigate } from 'react-router-dom';
+// redux
 import { RootState } from 'app/rootReducer';
-import { registerUser } from 'features/user/userSlice';
+import { registerUser, registerUserReset } from 'features/user/userSlice';
+
 import { errorNoty } from 'common/components/Notification/Notification';
+import TextFeild from 'common/components/FormHelper/TextFeild';
+
+import { registerInitialState, registerValidations } from './utils/formHelper';
 
 const Register: React.FC = () => {
   const navigate = useNavigate();
@@ -20,8 +23,14 @@ const Register: React.FC = () => {
   const { loading, error, data } = useSelector((state: RootState) => state.user?.registerUserPayload);
 
   useEffect(() => {
-    userData.login(data, data?.access_token);
-    navigate('/');
+    if (data) {
+      userData.login(data, data?.access_token);
+      navigate('/');
+    }
+
+    return () => {
+      dispatch(registerUserReset());
+    };
   }, [data]);
 
   useEffect(() => {
@@ -36,9 +45,6 @@ const Register: React.FC = () => {
           initialValues={registerInitialState}
           validationSchema={registerValidations}
           onSubmit={(values, { setSubmitting }) => {
-            console.log(values);
-            // setSubmitting(false);
-
             dispatch(registerUser(values));
           }}
         >

@@ -5,6 +5,12 @@ export interface Car {
   year: number;
   shippingStatus: string;
 }
+export interface CarRequest {
+  make: string;
+  model: string;
+  year: number;
+  shippingStatus: string;
+}
 
 interface CarState {
   loading: boolean;

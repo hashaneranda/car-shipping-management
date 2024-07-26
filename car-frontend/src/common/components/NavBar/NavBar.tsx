@@ -9,16 +9,22 @@ import { MdOutlineMenu, MdClose } from 'react-icons/md';
 import NavList from './components/NavList/NavList';
 import { Link, useNavigate } from 'react-router-dom';
 import { PrimaryButton } from '../Button/Button';
+import { useDispatch } from 'react-redux';
+import { userSliceReset } from 'features/user/userSlice';
 
 const Navbar = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [toggle, setToggle] = useState(true);
 
   const userData = useContext(UserContext);
   const isAuthenticated = userData?.state?.isAuthenticated;
   const user = userData?.state?.user ?? {};
 
-  console.log('userData', userData);
+  const handleLogout = () => {
+    userData.logout();
+    dispatch(userSliceReset());
+  };
 
   return (
     <nav className='flex flex-row items-center justify-between w-full py-5'>
@@ -38,10 +44,10 @@ const Navbar = () => {
         <div className='flex-shrink-0 hidden lg:flex lg:mr-5'>
           <div className='flex flex-col mr-8'>
             <p className='font-normal text-gray-700'>Hello</p>
-            <p className='text-2xl font-bold text-gray-900'> {user?.name}</p>
+            <p className='text-2xl font-bold text-gray-900'> {user?.name || 'Guest'}</p>
           </div>
 
-          <PrimaryButton onClick={() => userData.logout()}>Logout</PrimaryButton>
+          <PrimaryButton onClick={() => handleLogout()}>Logout</PrimaryButton>
         </div>
       ) : (
         <div className='flex-shrink-0 hidden lg:flex lg:mr-5'>

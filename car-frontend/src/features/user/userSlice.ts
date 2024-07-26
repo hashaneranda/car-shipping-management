@@ -14,7 +14,6 @@ const initialState: InitialState = {
     data: null,
     error: null,
   },
-
   user: {
     loading: false,
     data: null,
@@ -135,6 +134,10 @@ const createdSlice = createSlice({
         user: initialState.user,
       };
     },
+
+    userSliceReset(state) {
+      return initialState;
+    },
   },
 });
 
@@ -150,6 +153,7 @@ export const {
   loginUserError,
   loginUserReset,
   userReset,
+  userSliceReset,
 } = actions;
 
 export default reducer;

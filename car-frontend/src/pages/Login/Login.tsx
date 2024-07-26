@@ -1,16 +1,41 @@
-import React from 'react';
-import { Formik, Field, Form, ErrorMessage } from 'formik';
-
-import { loginInitialState, loginValidations } from './utils/formHelper';
-import TextFeild from 'common/components/FormHelper/TextFeild';
-import { Link } from 'react-router-dom';
+import React, { useContext, useEffect } from 'react';
+import { Formik, Field, Form } from 'formik';
+import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'app/rootReducer';
-import { loginUser } from 'features/user/userSlice';
+
+// context
+import { Context as UserContext } from 'common/context/UserContext';
+
+// redux
+import { loginUser, loginUserReset } from 'features/user/userSlice';
+import { errorNoty } from 'common/components/Notification/Notification';
+
+import TextFeild from 'common/components/FormHelper/TextFeild';
+
+import { loginInitialState, loginValidations } from './utils/formHelper';
 
 const Login: React.FC = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { loading, error } = useSelector((state: RootState) => state.user?.registerUserPayload);
+  const userData = useContext(UserContext);
+
+  const { loading, error, data } = useSelector((state: RootState) => state.user?.loginUserPayload);
+
+  useEffect(() => {
+    if (data) {
+      userData.login(data, data?.access_token);
+      navigate('/');
+    }
+
+    return () => {
+      dispatch(loginUserReset());
+    };
+  }, [data]);
+
+  useEffect(() => {
+    if (error) errorNoty({ msg: 'Something went wrong! Please try again.' });
+  }, [error]);
 
   return (
     <div className='flex items-center justify-center '>
@@ -20,9 +45,6 @@ const Login: React.FC = () => {
           initialValues={loginInitialState}
           validationSchema={loginValidations}
           onSubmit={(values, { setSubmitting }) => {
-            console.log(values);
-            // setSubmitting(false);
-
             dispatch(loginUser(values));
           }}
         >

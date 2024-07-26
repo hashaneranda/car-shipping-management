@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 // types
-import { InitialState, Car } from './types';
+import { InitialState, Car, CarRequest } from './types';
 
 const initialState: InitialState = {
   carList: {
@@ -112,7 +112,7 @@ const createdSlice = createSlice({
     },
 
     // Create car actions
-    createCarStart(state) {
+    createCarStart(state, action: PayloadAction<CarRequest>) {
       return {
         ...state,
         createdCar: {

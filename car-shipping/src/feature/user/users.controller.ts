@@ -19,8 +19,6 @@ export class UsersController {
   async register(@Body() createUserDto: CreateUserDto) {
     const user = await this.usersService.create(createUserDto);
 
-    console.log('user', user);
-
     return this.authService.login(user);
   }
 
@@ -34,6 +32,8 @@ export class UsersController {
     if (!user) {
       return { message: 'Invalid credentials' };
     }
-    return this.authService.login(user);
+
+    console.log('user', user);
+    return this.authService.login(user?._doc ?? user);
   }
 }

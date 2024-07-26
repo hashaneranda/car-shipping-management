@@ -4,47 +4,19 @@ import { Route, Navigate } from 'react-router-dom';
 interface IRouteProps {
   component: React.ReactNode;
   isAuthenticated: boolean;
-  path: string;
-  exact: boolean;
+  // path: string;
 }
 
-export function AppRoute({ component, isAuthenticated, path, exact, ...rest }: IRouteProps) {
+export function AppRoute({ component, isAuthenticated }: IRouteProps): JSX.Element {
   return (
-    <Route
-      {...rest}
-      path={path}
-      element={
-        isAuthenticated ? (
-          component
-        ) : (
-          <Navigate
-            to={{
-              pathname: '/login',
-            }}
-          />
-        )
-      }
-    />
-  );
+    isAuthenticated ? (
+      component
+    ) : (
+      <Navigate
+        to={{
+          pathname: '/login',
+        }}
+      />
+    )
+  ) as JSX.Element;
 }
-
-// interface
-
-// function AdminRoute({ component, isAuthenticated, ...rest }) {
-//   return (
-//     <Route
-//       {...rest}
-//       render={props =>
-//         isAuthenticated ? (
-//           React.createElement(component, props)
-//         ) : (
-//           <Redirect
-//             to={{
-//               pathname: '/admin',
-//             }}
-//           />
-//         )
-//       }
-//     />
-//   );
-// }

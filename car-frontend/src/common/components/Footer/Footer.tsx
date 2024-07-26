@@ -1,8 +1,28 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 const Footer = () => {
+  const footerRef = useRef<HTMLDivElement>(null);
+  const [isOverflowing, setIsOverflowing] = useState(false);
+
+  useEffect(() => {
+    const checkOverflow = () => {
+      if (footerRef.current) {
+        setIsOverflowing(footerRef.current.scrollHeight > window.innerHeight);
+      }
+    };
+
+    checkOverflow();
+    window.addEventListener('resize', checkOverflow);
+
+    return () => {
+      window.removeEventListener('resize', checkOverflow);
+    };
+  }, []);
+
   return (
-    <div className='bottom-0 grid grid-cols-1 gap-5 px-8 pt-5 pb-5 text-justify bg-white shadow-lg lg:absolute md:grid-cols-2 md:gap-10 lg:grid-cols-4 lg:gap-5'>
+    <div
+      className={`bottom-0 grid grid-cols-1 gap-5 px-8 pt-5 pb-5 text-justify bg-white shadow-lg md:grid-cols-2 md:gap-10 lg:grid-cols-4 lg:gap-5 ${isOverflowing ? 'relative' : 'lg:absolute'}`}
+    >
       <div>
         <h2 className='inline-flex font-poppins font-[400] text-2xl'>
           <span className='font-[900]'>CAR</span>Managment
