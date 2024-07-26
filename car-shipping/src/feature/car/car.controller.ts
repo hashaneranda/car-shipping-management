@@ -27,6 +27,12 @@ export class CarController {
     return this.carService.findAll(query);
   }
 
+  @Get(':id')
+  @ApiOperation({ summary: 'Get car detail' })
+  async getCar(@Param('id') id: string) {
+    return this.carService.findById(id);
+  }
+
   @Post()
   @ApiOperation({ summary: 'Add a new car' })
   async addCar(@Body() createCarDto: CreateCarDto) {

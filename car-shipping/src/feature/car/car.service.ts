@@ -42,19 +42,9 @@ export class CarService implements OnModuleInit {
     return { data, count };
   }
 
-  // async findAll(query: any): Promise<Car[]> {
-  //   const cacheKey = `cars:${JSON.stringify(query)}`;
-  //   const cachedData = await this.cacheManager.get<Car[]>(cacheKey);
-
-  //   if (cachedData) {
-  //     return cachedData;
-  //   }
-
-  //   const cars = await this.carModel.find(query).exec();
-  //   await this.cacheManager.set(cacheKey, cars, 300); // Cache for 5 minutes
-
-  //   return cars;
-  // }
+  async findById(id: string): Promise<Car> {
+    return this.carModel.findById(id).exec();
+  }
 
   async create(createCarDto: CreateCarDto): Promise<Car> {
     const newCar = new this.carModel(createCarDto);

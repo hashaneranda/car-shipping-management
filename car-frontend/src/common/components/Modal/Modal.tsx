@@ -28,6 +28,7 @@ const Modal = ({ isOpen, handleClose, children, showCloseBtn = false, header, fo
     <Transition appear show={isOpen} as={Fragment}>
       <Dialog as='div' className='relative z-100' onClose={() => handleClose()}>
         <Transition
+          show
           as={Fragment}
           enter='ease-out duration-300'
           enterFrom='opacity-0'
@@ -42,6 +43,7 @@ const Modal = ({ isOpen, handleClose, children, showCloseBtn = false, header, fo
         <div className='fixed inset-0 overflow-y-auto'>
           <div className='flex items-center justify-center min-h-full p-4 text-center'>
             <Transition
+              show
               as={Fragment}
               enter='ease-out duration-300'
               enterFrom='opacity-0 scale-95'

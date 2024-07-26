@@ -1,8 +1,8 @@
-import React, { forwardRef, useEffect, useState } from 'react';
+import React, { forwardRef, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import _ from 'lodash';
 
-import { fetchCarListStart, fetchCarListReset } from 'features/car/carSlice';
+import { fetchCarListStart, fetchCarListReset, deleteCarStart, deleteCarReset } from 'features/car/carSlice';
 
 import { Virtuoso, VirtuosoGrid } from 'react-virtuoso';
 import { Formik, Form, Field } from 'formik';
@@ -12,6 +12,9 @@ import CarCard from '../CarCard/CarCard';
 import { Car } from 'features/car/types';
 import { PrimaryButton } from 'common/components/Button/Button';
 import GridRenderer from '../GridRenderer/GridRenderer';
+import DeleteGuardModal from 'common/components/Modal/DeleteGuardModal';
+import { errorNoty, successNoty } from 'common/components/Notification/Notification';
+import { useNavigate } from 'react-router-dom';
 
 const CarFilterSchema = Yup.object().shape({
   make: Yup.string(),
@@ -23,13 +26,25 @@ const CarFilterSchema = Yup.object().shape({
 const inputfeildStyle = 'w-full px-3 py-2 border input-field md:w-fit rounded-xl';
 
 const CarList: React.FC = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const carList = useSelector((state: RootState) => state.car.carList);
+  const deletedCar = useSelector((state: RootState) => state.car?.deletedCar);
+
+  const [showDeletGuard, setShowDeletGuard] = useState<boolean>(false);
+  const [selectedCar, setSelectedCar] = useState<Car>();
+
   const [page, setPage] = useState(1);
   const [limit] = useState(20);
+
   const [filters, setFilters] = useState({ make: '', model: '', year: '', shippingStatus: '' });
 
   const [dataContainer, setDataContainer] = useState<Car[]>([]);
+
+  const selectedCarName = useMemo(
+    () => (selectedCar ? `${selectedCar?.make} ${selectedCar?.model} (${selectedCar?.year})` : 'car'),
+    [selectedCar],
+  );
 
   useEffect(() => {
     if (carList.data?.data) {
@@ -55,6 +70,22 @@ const CarList: React.FC = () => {
     }
   }, [filters?.make, filters?.model, filters?.year, filters?.shippingStatus]);
 
+  useEffect(() => {
+    if (deletedCar?.data) {
+      successNoty({ msg: `${selectedCarName} Deleted Successfully!` });
+      handleCloseDeleteModal();
+      dispatch(deleteCarReset());
+    }
+  }, [deletedCar?.data]);
+
+  useEffect(() => {
+    if (deletedCar?.error) {
+      errorNoty({ msg: 'Something went wrong! Please try again.' });
+      handleCloseDeleteModal();
+      dispatch(deleteCarReset());
+    }
+  }, [deletedCar?.error]);
+
   const loadMore = () => {
     setPage(prevPage => prevPage + 1);
   };
@@ -64,33 +95,9 @@ const CarList: React.FC = () => {
     setPage(1);
   };
 
-  const ItemWrapper = ({ children, ...props }: any) => (
-    <div
-      {...props}
-      style={{
-        display: 'flex',
-        flex: 1,
-        textAlign: 'center',
-        padding: '1rem 1rem',
-        border: '1px solid gray',
-        whiteSpace: 'nowrap',
-      }}
-    >
-      {children}
-    </div>
-  );
-
-  const gridComponents: any = {
-    List: forwardRef<any, any>(({ style, children, ...props }, ref) => (
-      <div ref={ref} {...props} className='flex flex-wrap'>
-        {children}
-      </div>
-    )),
-    Item: ({ children, ...props }: any) => (
-      <div {...props} className='md:w-[33%] p-5 sm:w-[50%] w-full items-stretch'>
-        {children}
-      </div>
-    ),
+  const handleCloseDeleteModal = () => {
+    setShowDeletGuard(false);
+    setSelectedCar(undefined);
   };
 
   return (
@@ -129,8 +136,27 @@ const CarList: React.FC = () => {
         data={dataContainer || []}
         endReached={loadMore}
         dataLength={carList.data?.count}
-        renderItem={({ index }: { index: number }) => <CarCard car={dataContainer[index]} key={index} />}
+        renderItem={({ index }: { index: number }) => (
+          <CarCard
+            car={dataContainer[index]}
+            key={index}
+            onDelete={() => {
+              setShowDeletGuard(true);
+              setSelectedCar(dataContainer[index]);
+            }}
+            onEdit={() => {
+              navigate('/car/edit', { state: { car: dataContainer[index] } });
+            }}
+          />
+        )}
         overscan={100}
+      />
+
+      <DeleteGuardModal
+        type={selectedCar ? `${selectedCar?.make} ${selectedCar?.model} (${selectedCar?.year})` : 'car'}
+        isOpen={showDeletGuard}
+        handleClose={() => handleCloseDeleteModal()}
+        successAction={() => dispatch(deleteCarStart(selectedCar?._id ?? ''))}
       />
     </div>
   );

@@ -16,11 +16,11 @@ export const createCar = async (carData: any) => {
 };
 
 export const deleteCar = async (id: string) => {
-  const response = await axios.delete('/cars/${id}');
+  const response = await axios.delete(`/cars/${id}`);
   return response.data;
 };
 
-export const updateCar = async (id: string, carData: any) => {
-  const response = await axios.put('/cars/${id}', carData);
+export const updateCar = async ({ id, carData }: { id: string; carData: any }) => {
+  const response = await axios.patch(`/cars/${id}`, carData);
   return response.data;
 };

@@ -150,7 +150,7 @@ const createdSlice = createSlice({
     },
 
     // Delete car actions
-    deleteCarStart(state) {
+    deleteCarStart(state, action: PayloadAction<string>) {
       return {
         ...state,
         deletedCar: {
@@ -188,7 +188,7 @@ const createdSlice = createSlice({
     },
 
     // Update car actions
-    updateCarStart(state) {
+    updateCarStart(state, action: PayloadAction<any>) {
       return {
         ...state,
         updatedCar: {

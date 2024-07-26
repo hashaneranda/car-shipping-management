@@ -28,6 +28,7 @@ const App = () => {
           <Route path='/register' element={<Register />} />
 
           <Route path='/car/add' element={<AppRoute component={<AddCar />} isAuthenticated={state?.isAuthenticated} />} />
+          <Route path='/car/edit' element={<AppRoute component={<AddCar isEdit={true} />} isAuthenticated={state?.isAuthenticated} />} />
         </Routes>
       </Layout>
     </Router>

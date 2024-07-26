@@ -7,46 +7,58 @@ import { Context as UserContext } from 'common/context/UserContext';
 
 import TextFeild from 'common/components/FormHelper/TextFeild';
 import { initialState, shippingStatusList, validations } from './utils/formHelper';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { RootState } from 'app/rootReducer';
 
 import { errorNoty, successNoty } from 'common/components/Notification/Notification';
 import DropDownFeild from 'common/components/FormHelper/DropDownFeild';
-import { createCarStart, createCarReset } from 'features/car/carSlice';
+import { createCarStart, createCarReset, updateCarStart, updateCarReset } from 'features/car/carSlice';
 
-const AddCar: React.FC = () => {
+type IAddCarType = {
+  isEdit?: boolean;
+};
+
+const AddCar: React.FC<IAddCarType> = ({ isEdit }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const userData = useContext(UserContext);
+  const { state } = useLocation();
 
-  const { loading, error, data } = useSelector((state: RootState) => state.car?.createdCar);
+  const createdCar = useSelector((state: RootState) => state.car?.createdCar);
+  const updatedCar = useSelector((state: RootState) => state.car?.updatedCar);
 
   useEffect(() => {
-    if (data) {
+    if (createdCar?.data) {
       successNoty({ msg: 'Car Added Successfully!' });
+      navigate('/');
+    }
+    if (updatedCar?.data) {
+      successNoty({ msg: 'Car Updated Successfully!' });
       navigate('/');
     }
 
     return () => {
       dispatch(createCarReset());
+      dispatch(updateCarReset());
     };
-  }, [data]);
+  }, [createdCar?.data, updatedCar?.data]);
 
   useEffect(() => {
-    if (error) errorNoty({ msg: 'Something went wrong! Please try again.' });
-  }, [error]);
+    if (createdCar?.error || updatedCar?.error) errorNoty({ msg: 'Something went wrong! Please try again.' });
+  }, [createdCar?.error, updatedCar?.error]);
 
   return (
     <div className='flex justify-center  min-h-[90vh]'>
       <div className='w-full max-w-md space-y-3 bg-white rounded-lg '>
-        <h1 className='text-3xl font-bold text-center'>Add New Car</h1>
+        <h1 className='text-3xl font-bold text-center'>{isEdit ? 'Edit' : 'Add'} New Car</h1>
         <Formik
-          initialValues={initialState}
+          initialValues={state?.car ?? initialState}
           validationSchema={validations}
           onSubmit={(values, { setSubmitting }) => {
             const { year, ...rest } = values;
 
-            dispatch(createCarStart({ ...rest, year: Number(year ?? 0) }));
+            if (isEdit) {
+              dispatch(updateCarStart({ id: state?.car?._id, carData: { ...rest, year: Number(year ?? 0) } }));
+            } else dispatch(createCarStart({ ...rest, year: Number(year ?? 0) }));
           }}
         >
           <Form className='space-y-4'>
@@ -57,7 +69,7 @@ const AddCar: React.FC = () => {
             <DropDownFeild label='Shipping Status' name='shippingStatus' options={shippingStatusList} />
 
             <button type='submit' className='w-full px-4 py-2 mt-5 text-white bg-blue-500 rounded-md hover:bg-blue-600'>
-              {loading ? 'Submiting...' : 'Submit'}
+              {createdCar?.loading || updatedCar?.loading ? 'Submiting...' : 'Submit'}
             </button>
           </Form>
         </Formik>

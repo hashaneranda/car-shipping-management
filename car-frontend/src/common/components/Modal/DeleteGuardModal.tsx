@@ -16,7 +16,7 @@ function DeleteGuardModal({ isOpen, handleClose, successAction, type }: DeleteGu
       <h1 className='text-2xl font-bold text-center'>Delete {type}</h1>
       <p className='text-sm text-center text-gray-400'>Are you sure you want to delete {type}?</p>
 
-      <div className='flex flex-row justify-center pt-3 '>
+      <div className='flex flex-row justify-center pt-3 space-x-5'>
         <PrimaryButton onClick={() => successAction()}>Delete</PrimaryButton>
 
         <SecondaryButton onClick={() => handleClose()}>Close</SecondaryButton>
