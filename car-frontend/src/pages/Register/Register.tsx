@@ -1,16 +1,32 @@
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
 
+// context
+import { Context as UserContext } from 'common/context/UserContext';
+
 import TextFeild from 'common/components/FormHelper/TextFeild';
 import { registerInitialState, registerValidations } from './utils/formHelper';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { RootState } from 'app/rootReducer';
 import { registerUser } from 'features/user/userSlice';
+import { errorNoty } from 'common/components/Notification/Notification';
 
 const Register: React.FC = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { loading, error } = useSelector((state: RootState) => state.user?.registerUserPayload);
+  const userData = useContext(UserContext);
+
+  const { loading, error, data } = useSelector((state: RootState) => state.user?.registerUserPayload);
+
+  useEffect(() => {
+    userData.login(data, data?.access_token);
+    navigate('/');
+  }, [data]);
+
+  useEffect(() => {
+    if (error) errorNoty({ msg: 'Something went wrong! Please try again.' });
+  }, [error]);
 
   return (
     <div className='flex items-center justify-center pb-5'>
@@ -34,7 +50,7 @@ const Register: React.FC = () => {
             <TextFeild label='Confirm Password' name='confirmPassword' type='password' />
 
             <button type='submit' className='w-full px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600'>
-              Sign Up
+              {loading ? 'Signing up...' : 'Sign Up'}
             </button>
           </Form>
         </Formik>

@@ -17,7 +17,11 @@ export class UsersController {
   @Post('register')
   @ApiOperation({ summary: 'Register a new user' })
   async register(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
+    const user = await this.usersService.create(createUserDto);
+
+    console.log('user', user);
+
+    return this.authService.login(user);
   }
 
   @Post('login')

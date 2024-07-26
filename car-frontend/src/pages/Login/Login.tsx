@@ -39,7 +39,7 @@ const Login: React.FC = () => {
         <p className='pt-5 text-center'>
           Not a member?{' '}
           <Link className='font-semibold underline hover:text-reddish text-primary ' to={'/register'}>
-            Sign Up
+            {loading ? 'Signing in...' : 'Sign In'}
           </Link>
         </p>
       </div>

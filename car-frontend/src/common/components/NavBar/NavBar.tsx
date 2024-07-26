@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
-// import {logo,close,menu} from "../assets";
+import React, { useContext, useState } from 'react';
+
+// context
+import { Context as UserContext } from 'common/context/UserContext';
 
 import { FaReact } from 'react-icons/fa';
 import { MdOutlineMenu, MdClose } from 'react-icons/md';
@@ -11,6 +13,12 @@ import { PrimaryButton } from '../Button/Button';
 const Navbar = () => {
   const navigate = useNavigate();
   const [toggle, setToggle] = useState(true);
+
+  const userData = useContext(UserContext);
+  const isAuthenticated = userData?.state?.isAuthenticated;
+  const user = userData?.state?.user ?? {};
+
+  console.log('userData', userData);
 
   return (
     <nav className='flex flex-row items-center justify-between w-full py-5'>
@@ -26,13 +34,24 @@ const Navbar = () => {
         <NavList />{' '}
       </ul>
 
-      <div className='flex-shrink-0 hidden lg:flex lg:mr-5'>
-        <Link className='px-10 py-3 text-lg font-semibold hover:text-reddish' to={'login'}>
-          Sign In
-        </Link>
+      {isAuthenticated ? (
+        <div className='flex-shrink-0 hidden lg:flex lg:mr-5'>
+          <div className='flex flex-col mr-8'>
+            <p className='font-normal text-gray-700'>Hello</p>
+            <p className='text-2xl font-bold text-gray-900'> {user?.name}</p>
+          </div>
 
-        <PrimaryButton onClick={() => navigate('/register')}>Register</PrimaryButton>
-      </div>
+          <PrimaryButton onClick={() => userData.logout()}>Logout</PrimaryButton>
+        </div>
+      ) : (
+        <div className='flex-shrink-0 hidden lg:flex lg:mr-5'>
+          <Link className='px-10 py-3 text-lg font-semibold hover:text-reddish' to={'login'}>
+            Sign In
+          </Link>
+
+          <PrimaryButton onClick={() => navigate('/register')}>Register</PrimaryButton>
+        </div>
+      )}
 
       <div className='lg:hidden'>
         <div className='w-[40px] mx-5  mr-12' onClick={() => setToggle(prev => !prev)}>

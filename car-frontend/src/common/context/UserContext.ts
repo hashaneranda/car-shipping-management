@@ -21,9 +21,9 @@ interface UserContextProps {
 }
 
 const initialState: UserState = {
-  isAuthenticated: false,
-  user: null,
-  token: '',
+  isAuthenticated: getFromStorage('token') ? !!JSON.parse(getFromStorage('token')) : false,
+  user: getFromStorage('user') ? JSON.parse(getFromStorage('user')) : null,
+  token: getFromStorage('token') ? JSON.parse(getFromStorage('token')) : '',
 };
 
 // Define actions
