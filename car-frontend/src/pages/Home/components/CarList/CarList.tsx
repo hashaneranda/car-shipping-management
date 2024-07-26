@@ -11,6 +11,7 @@ import { RootState } from 'app/rootReducer';
 import CarCard from '../CarCard/CarCard';
 import { Car } from 'features/car/types';
 import { PrimaryButton } from 'common/components/Button/Button';
+import GridRenderer from '../GridRenderer/GridRenderer';
 
 const CarFilterSchema = Yup.object().shape({
   make: Yup.string(),
@@ -19,10 +20,13 @@ const CarFilterSchema = Yup.object().shape({
   shippingStatus: Yup.string(),
 });
 
+const inputfeildStyle = 'w-full px-3 py-2 border input-field md:w-fit rounded-xl';
+
 const CarList: React.FC = () => {
   const dispatch = useDispatch();
   const carList = useSelector((state: RootState) => state.car.carList);
   const [page, setPage] = useState(1);
+  const [limit] = useState(20);
   const [filters, setFilters] = useState({ make: '', model: '', year: '', shippingStatus: '' });
 
   const [dataContainer, setDataContainer] = useState<Car[]>([]);
@@ -38,7 +42,7 @@ const CarList: React.FC = () => {
   }, [carList.data?.data]);
 
   useEffect(() => {
-    dispatch(fetchCarListStart({ page, ...filters }));
+    dispatch(fetchCarListStart({ page, ...filters, limit }));
     // return () => {
     //   dispatch(fetchCarListReset());
     // };
@@ -46,7 +50,7 @@ const CarList: React.FC = () => {
 
   useEffect(() => {
     if (filters?.make || filters?.model || filters?.year || filters?.shippingStatus) {
-      dispatch(fetchCarListStart({ page, ...filters }));
+      dispatch(fetchCarListStart({ page, ...filters, limit }));
       setDataContainer([]);
     }
   }, [filters?.make, filters?.model, filters?.year, filters?.shippingStatus]);
@@ -93,12 +97,11 @@ const CarList: React.FC = () => {
     <div className='container p-4 mx-auto'>
       <Formik initialValues={filters} validationSchema={CarFilterSchema} onSubmit={handleFilter}>
         {() => (
-          <Form className='flex mb-4 space-x-4'>
-            <Field name='make' placeholder='Make' className='input-field' />
-            <Field name='model' placeholder='Model' className='input-field' />
-            <Field as='select' name='year' className='input-field'>
-              <option value=''>Year</option>
-              {/* Add options for years */}
+          <Form className='flex flex-col flex-wrap items-center  gap-2 mb-4 md:flex-row justify-start  w-[90%] px-2'>
+            <Field name='make' placeholder='Make' className={inputfeildStyle} />
+            <Field name='model' placeholder='Model' className={inputfeildStyle} />
+            <Field as='select' name='year' className={inputfeildStyle}>
+              <option value=''>Year</option>å{/* Add options for years */}
               {[...Array(30)].map((_, i) => {
                 const year = 1995 + i;
                 return (
@@ -108,7 +111,7 @@ const CarList: React.FC = () => {
                 );
               })}
             </Field>
-            <Field as='select' name='shippingStatus' className='input-field'>
+            <Field as='select' name='shippingStatus' className={inputfeildStyle}>
               <option value=''>Shipping Status</option>
               <option value='pending'>Pending</option>
               <option value='shipped'>Shipped</option>
@@ -122,15 +125,12 @@ const CarList: React.FC = () => {
       {carList.loading && <div>Loading...</div>}
       {carList.error && <div>Error: {carList.error}</div>}
 
-      {/* {carList.data[0].toString()} */}
-
-      <VirtuosoGrid
-        style={{ height: 100, overscrollBehavior: 'none' }}
+      <GridRenderer
         data={dataContainer || []}
         endReached={loadMore}
-        components={gridComponents}
-        itemContent={index => <CarCard car={dataContainer[index]} />}
-        useWindowScroll
+        dataLength={carList.data?.count}
+        renderItem={({ index }: { index: number }) => <CarCard car={dataContainer[index]} key={index} />}
+        overscan={100}
       />
     </div>
   );

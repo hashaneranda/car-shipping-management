@@ -5,9 +5,9 @@ type Props = {
   car: Car;
 };
 
-export default function CarCard({ car }: Props) {
+const CarCard = React.memo(({ car }: Props) => {
   return (
-    <div className='max-w-sm mb-5 bg-white rounded-lg shadow-lg '>
+    <div className='max-w-sm mb-5 bg-white rounded-lg shadow-lg h-90'>
       <a href='#'>
         <img
           className='rounded-t-lg'
@@ -19,7 +19,7 @@ export default function CarCard({ car }: Props) {
         <a href='#'>
           <h5 className='mb-2 text-2xl font-bold tracking-tight text-gray-900 '>
             {' '}
-            {car?.make} {car.model} ({car?.year})
+            {car?.make} {car?.model} ({car?.year})
           </h5>
         </a>
         <p className='mb-3 font-normal text-gray-700 dark:text-gray-400'>Status: {car?.shippingStatus}</p>
@@ -41,4 +41,6 @@ export default function CarCard({ car }: Props) {
       </div>
     </div>
   );
-}
+});
+
+export default CarCard;
