@@ -2,7 +2,7 @@ import { io } from 'socket.io-client';
 
 import { updateCar } from 'features/car/carSlice';
 
-const socket = io('http://localhost:3000'); // Replace with your server URL
+const socket = io(process.env.BACKEND_URL ?? 'http://localhost:3000'); // Replace with your server URL
 
 export const initSocket = (dispatch: any) => {
   socket.on('connect', () => {

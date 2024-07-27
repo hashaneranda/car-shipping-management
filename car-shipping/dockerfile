@@ -1,24 +1,23 @@
 
-FROM node:18
+FROM node:20
 
-# Create app directory
-WORKDIR /usr/src/app
+WORKDIR /app/backend
 
-# Install app dependencies
-COPY package*.json ./
-RUN npm install
-RUN npm install --save-dev nodemon
+# Copy package.json and package-lock.json
+COPY package.json yarn.lock ./
 
-# Bundle app source
+# Install dependencies
+RUN yarn install
+
+# Copy the rest of the application code
 COPY . .
 
-# Copy nodemon config
-# COPY nodemon.json nodemon.json
+# Build the NestJS app
+RUN npm run build
 
-# Copy .env file
-COPY .env .env
-
-# RUN npm run seed
-
+# Expose port 3000
 EXPOSE 3000
-CMD [ "npm", "run", "start:dev" ]
+
+# Start the NestJS app
+CMD ["node", "dist/src/main"]
+
