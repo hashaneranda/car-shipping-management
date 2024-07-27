@@ -5,6 +5,7 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
 import { AuthService } from '../../auth/auth.service';
+import { Public } from 'src/auth/public.decorator';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -14,6 +15,7 @@ export class UsersController {
     private readonly authService: AuthService,
   ) {}
 
+  @Public()
   @Post('register')
   @ApiOperation({ summary: 'Register a new user' })
   async register(@Body() createUserDto: CreateUserDto) {
@@ -22,6 +24,7 @@ export class UsersController {
     return this.authService.login(user);
   }
 
+  @Public()
   @Post('login')
   @ApiOperation({ summary: 'Login a user' })
   async login(@Body() loginUserDto: LoginUserDto) {

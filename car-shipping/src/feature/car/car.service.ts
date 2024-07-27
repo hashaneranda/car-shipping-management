@@ -9,12 +9,14 @@ import { CreateCarDto } from './dto/create-car.dto';
 import { UpdateCarDto } from './dto/update-car.dto';
 import { faker } from '@faker-js/faker';
 import { QueryCarDto } from './dto/query-car.dto';
+import { CarGateway } from './car.gateway';
 
 @Injectable()
 export class CarService implements OnModuleInit {
   constructor(
     @InjectModel(Car.name) private carModel: Model<CarDocument>,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
+    private carGateway: CarGateway,
   ) {}
 
   async onModuleInit() {
@@ -49,7 +51,9 @@ export class CarService implements OnModuleInit {
   async create(createCarDto: CreateCarDto): Promise<Car> {
     const newCar = new this.carModel(createCarDto);
     await this.cacheManager.reset(); // Invalidate cache
-    return newCar.save();
+    const savedCar = await newCar.save();
+    this.carGateway.broadcastUpdate(savedCar); // Broadcast update with car data
+    return savedCar;
   }
 
   async update(id: string, updateCarDto: UpdateCarDto): Promise<Car> {
@@ -57,12 +61,14 @@ export class CarService implements OnModuleInit {
       .findByIdAndUpdate(id, updateCarDto, { new: true })
       .exec();
     await this.cacheManager.reset(); // Invalidate cache
+    this.carGateway.broadcastUpdate(updatedCar);
     return updatedCar;
   }
 
   async delete(id: string): Promise<Car> {
     const deletedCar = await this.carModel.findByIdAndDelete(id).exec();
     await this.cacheManager.reset(); // Invalidate cache
+    this.carGateway.broadcastUpdate(deletedCar, 'delete');
     return deletedCar;
   }
 

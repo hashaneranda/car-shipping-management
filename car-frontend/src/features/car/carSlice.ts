@@ -29,6 +29,7 @@ const initialState: InitialState = {
     data: null,
     error: null,
   },
+  lastFetched: null,
 };
 
 const createdSlice = createSlice({
@@ -72,7 +73,46 @@ const createdSlice = createSlice({
         carList: initialState.carList,
       };
     },
+    // updateCarList(state) {
+    //   console.log('state.carList', state.carList);
 
+    //   let carList = (state.carList?.data?.data ?? []) as Car[];
+
+    //   return {
+    //     ...state,
+    //     carList: initialState.carList,
+    //   };
+    // },
+    updateCar(state, action: PayloadAction<{ car: Car; action: string }>) {
+      const { car, action: updateAction } = action.payload;
+
+      const carData = state.carList?.data as any;
+
+      let carList = (carData?.data ?? []) as Car[];
+
+      if (updateAction === 'delete') {
+        carList = carList.filter(c => c._id !== car._id);
+      } else {
+        const index = carList.findIndex(c => c._id === car._id);
+        if (index !== -1) {
+          carList[index] = car;
+        } else {
+          carList.push(car);
+        }
+      }
+
+      const res = { ...carData, data: carList };
+
+      return {
+        ...state,
+        carList: {
+          loading: false,
+          data: res,
+          error: null,
+        },
+        lastFetched: Date.now(),
+      };
+    },
     // Fetch car detail actions
     fetchCarDetailStart(state) {
       return {
@@ -250,6 +290,7 @@ export const {
   updateCarSuccess,
   updateCarError,
   updateCarReset,
+  updateCar,
 } = actions;
 
 export default reducer;

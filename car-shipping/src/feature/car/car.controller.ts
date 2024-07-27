@@ -8,25 +8,31 @@ import {
   Param,
   Body,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CarService } from './car.service';
 import { CreateCarDto } from './dto/create-car.dto';
 import { UpdateCarDto } from './dto/update-car.dto';
 import { QueryCarDto } from './dto/query-car.dto';
+import { Public } from 'src/auth/public.decorator';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @ApiTags('cars')
 @ApiBearerAuth()
 @Controller('cars')
+@UseGuards(JwtAuthGuard)
 export class CarController {
   constructor(private readonly carService: CarService) {}
 
+  @Public()
   @Get()
   @ApiOperation({ summary: 'Get all cars' })
   async getCars(@Query() query: QueryCarDto) {
     return this.carService.findAll(query);
   }
 
+  @Public()
   @Get(':id')
   @ApiOperation({ summary: 'Get car detail' })
   async getCar(@Param('id') id: string) {

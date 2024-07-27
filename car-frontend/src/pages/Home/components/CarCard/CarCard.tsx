@@ -13,7 +13,7 @@ type Props = {
   onDelete: () => void;
 };
 
-const CarCard = React.memo(({ car, onEdit, onDelete }: Props) => {
+const CarCard = ({ car, onEdit, onDelete }: Props) => {
   const { state } = useContext(UserContext);
 
   const carName = useMemo(() => `${car?.make} ${car?.model} (${car?.year})`, [car]);
@@ -70,6 +70,6 @@ const CarCard = React.memo(({ car, onEdit, onDelete }: Props) => {
       </div>
     </div>
   );
-});
+};
 
 export default CarCard;

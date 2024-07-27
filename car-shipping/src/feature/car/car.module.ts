@@ -4,6 +4,7 @@ import { Car, CarSchema } from '../../schemas/car.schema';
 import { CarService } from './car.service';
 import { CarController } from './car.controller';
 import { CacheConfigModule } from '../cache/cache.module';
+import { CarGateway } from './car.gateway';
 
 @Module({
   imports: [
@@ -11,7 +12,7 @@ import { CacheConfigModule } from '../cache/cache.module';
     CacheConfigModule,
   ],
   controllers: [CarController],
-  providers: [CarService],
+  providers: [CarService, CarGateway],
   exports: [CarModule],
 })
 export class CarModule {}

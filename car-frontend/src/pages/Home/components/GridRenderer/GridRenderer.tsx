@@ -55,7 +55,6 @@ const GridRenderer: React.FC<IGridRenderer> = ({ renderItem: RenderItem, dataLen
   return (
     <div className='w-100 h-[100vh]'>
       <VirtuosoGrid
-        // style={{ height: 500 }}
         data={data}
         endReached={endReached}
         overscan={overscan}

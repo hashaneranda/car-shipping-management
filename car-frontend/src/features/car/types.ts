@@ -14,7 +14,7 @@ export interface CarRequest {
 
 interface CarState {
   loading: boolean;
-  data: Car | Car[] | null;
+  data: Car | Car[] | null | { data: Car[]; count: number };
   error: string | null;
 }
 
@@ -24,4 +24,5 @@ export interface InitialState {
   createdCar: CarState;
   deletedCar: CarState;
   updatedCar: CarState;
+  lastFetched: number | null;
 }

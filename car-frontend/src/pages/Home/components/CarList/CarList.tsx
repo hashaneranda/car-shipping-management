@@ -15,6 +15,7 @@ import GridRenderer from '../GridRenderer/GridRenderer';
 import DeleteGuardModal from 'common/components/Modal/DeleteGuardModal';
 import { errorNoty, successNoty } from 'common/components/Notification/Notification';
 import { useNavigate } from 'react-router-dom';
+import socket, { initSocket } from 'services/socketService';
 
 const CarFilterSchema = Yup.object().shape({
   make: Yup.string(),
@@ -61,6 +62,12 @@ const CarList: React.FC = () => {
     // return () => {
     //   dispatch(fetchCarListReset());
     // };
+
+    initSocket(dispatch);
+
+    return () => {
+      socket.off('update');
+    };
   }, [dispatch, page]);
 
   useEffect(() => {
@@ -130,27 +137,29 @@ const CarList: React.FC = () => {
       </Formik>
 
       {carList.loading && <div>Loading...</div>}
-      {carList.error && <div>Error: {carList.error}</div>}
+      {carList.error && <div>Error: {carList.error?.data?.message}</div>}
 
-      <GridRenderer
-        data={dataContainer || []}
-        endReached={loadMore}
-        dataLength={carList.data?.count}
-        renderItem={({ index }: { index: number }) => (
-          <CarCard
-            car={dataContainer[index]}
-            key={index}
-            onDelete={() => {
-              setShowDeletGuard(true);
-              setSelectedCar(dataContainer[index]);
-            }}
-            onEdit={() => {
-              navigate('/car/edit', { state: { car: dataContainer[index] } });
-            }}
-          />
-        )}
-        overscan={100}
-      />
+      {carList.data && (
+        <GridRenderer
+          data={dataContainer || []}
+          endReached={loadMore}
+          dataLength={carList.data?.count}
+          renderItem={({ index }: { index: number }) => (
+            <CarCard
+              car={dataContainer[index]}
+              key={index}
+              onDelete={() => {
+                setShowDeletGuard(true);
+                setSelectedCar(dataContainer[index]);
+              }}
+              onEdit={() => {
+                navigate('/car/edit', { state: { car: dataContainer[index] } });
+              }}
+            />
+          )}
+          overscan={100}
+        />
+      )}
 
       <DeleteGuardModal
         type={selectedCar ? `${selectedCar?.make} ${selectedCar?.model} (${selectedCar?.year})` : 'car'}
