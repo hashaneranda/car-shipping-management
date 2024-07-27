@@ -12,7 +12,34 @@ For code quality:
 
 ## Getting Started
 
+### Prerequisites
+
+Make sure you have the following installed on your system:
+
+- [Docker](https://docs.docker.com/get-docker/)
+- [Docker Compose](https://docs.docker.com/compose/install/)
+
 ### Installation
+
+1. **Clone the repository**
+
+   ```sh
+   git clone https://github.com/hashaneranda/car-shipping-management.git
+   cd car-shipping-management
+   ```
+
+### Running the Project
+
+1. **Build and run the Docker containers**
+
+   ```sh
+   docker-compose up --build
+   ```
+
+2. **Access the frontend and backend**
+
+   - Frontend: Open your browser and navigate to http://localhost
+   - Backend: Access the Swagger documentation at http://localhost:3000/api.
 
 ## Project Structure
 
