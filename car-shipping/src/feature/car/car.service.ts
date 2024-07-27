@@ -1,4 +1,3 @@
-// src/car/car.service.ts
 import { Injectable, Inject, OnModuleInit } from '@nestjs/common';
 import { Cache } from 'cache-manager';
 import { InjectModel } from '@nestjs/mongoose';
@@ -25,6 +24,16 @@ export class CarService implements OnModuleInit {
   }
 
   async findAll(query: QueryCarDto): Promise<{ data: Car[]; count: number }> {
+    const cacheKey = JSON.stringify(query);
+    const cachedResult = await this.cacheManager.get<{
+      data: Car[];
+      count: number;
+    }>(cacheKey);
+
+    if (cachedResult) {
+      return cachedResult;
+    }
+
     const { page = 1, limit = 10, make, model, year, shippingStatus } = query;
 
     const filter: any = {};
@@ -41,7 +50,10 @@ export class CarService implements OnModuleInit {
 
     const count = await this.carModel.countDocuments(filter).exec();
 
-    return { data, count };
+    const result = { data, count };
+    await this.cacheManager.set(cacheKey, result, 300);
+
+    return result;
   }
 
   async findById(id: string): Promise<Car> {
@@ -60,14 +72,14 @@ export class CarService implements OnModuleInit {
     const updatedCar = await this.carModel
       .findByIdAndUpdate(id, updateCarDto, { new: true })
       .exec();
-    await this.cacheManager.reset(); // Invalidate cache
+    await this.invalidateCache();
     this.carGateway.broadcastUpdate(updatedCar);
     return updatedCar;
   }
 
   async delete(id: string): Promise<Car> {
     const deletedCar = await this.carModel.findByIdAndDelete(id).exec();
-    await this.cacheManager.reset(); // Invalidate cache
+    await this.invalidateCache();
     this.carGateway.broadcastUpdate(deletedCar, 'delete');
     return deletedCar;
   }
@@ -89,5 +101,12 @@ export class CarService implements OnModuleInit {
       cars.push(createCarDto);
     }
     await this.carModel.insertMany(cars);
+  }
+
+  private async invalidateCache() {
+    const keys = await this.cacheManager.store.keys();
+    for (const key of keys) {
+      await this.cacheManager.del(key);
+    }
   }
 }
