@@ -2,8 +2,8 @@
 
 ## What's inside
 
-- [Backend]- nestjs
-- [Frontend]- react
+- [Backend]- nestjs - https://car-shipping-management.onrender.com/api
+- [Frontend]- react - https://car-shipping-management.vercel.app/
 
 ## Project Architecture
 
