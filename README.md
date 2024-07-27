@@ -5,6 +5,14 @@
 - [Backend]- nestjs
 - [Frontend]- react
 
+## Project Architecture
+
+![alt text](https://github.com/hashaneranda/car-shipping-management/blob/main/architecture.png?raw=true)
+
+## Project Flow Chart
+
+![alt text](https://github.com/hashaneranda/car-shipping-management/blob/main/flow-chart.png?raw=true)
+
 For code quality:
 
 - [ESLint](https://github.com/eslint/eslint)
